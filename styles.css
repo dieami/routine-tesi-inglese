@@ -132,3 +132,22 @@ footer{
   font-size:13px;
   padding:16px 4px;
 }
+
+
+.done-slot{
+  opacity:.58;
+  border-color:rgba(34,197,94,.45);
+}
+.done-slot .task span:first-child{
+  text-decoration:line-through;
+}
+.done-mark{
+  display:inline-block;
+  margin-top:6px;
+  color:#86efac;
+  font-size:12px;
+  font-weight:800;
+}
+button:disabled{
+  cursor:not-allowed;
+}

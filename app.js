@@ -19,18 +19,37 @@ function todayKey(){
 function completionKey(){
   return "routine_done_" + todayKey();
 }
+function activityDoneKey(){
+  return "routine_activity_done_" + todayKey();
+}
 function getDone(){
   return JSON.parse(localStorage.getItem(completionKey()) || "[]");
 }
 function setDone(arr){
   localStorage.setItem(completionKey(), JSON.stringify(arr));
 }
+function getActivityDone(){
+  return JSON.parse(localStorage.getItem(activityDoneKey()) || "[]");
+}
+function setActivityDone(arr){
+  localStorage.setItem(activityDoneKey(), JSON.stringify(arr));
+}
+function activityId(day, item){
+  return `${day}|${item[0]}-${item[1]}|${item[2]}`;
+}
 function pickToday(){
   return dayNames[new Date().getDay()];
 }
-function currentOrNext(items){
+function currentActivity(items){
   const n = nowMinutes();
-  return items.find(x => minutes(x[1]) >= n) || items[items.length-1];
+  return items.find(x => minutes(x[0]) <= n && n <= minutes(x[1])) || null;
+}
+function nextActivity(items){
+  const n = nowMinutes();
+  return items.find(x => minutes(x[0]) > n) || items[items.length-1];
+}
+function currentOrNext(items){
+  return currentActivity(items) || nextActivity(items);
 }
 function scheduleLocalNotifications(items){
   if (!("Notification" in window) || Notification.permission !== "granted") return;
@@ -51,23 +70,37 @@ function scheduleLocalNotifications(items){
     }
   });
 }
+
 function render(){
   const dayData = data.days[selectedDay];
   $("today-subtitle").textContent = `${selectedDay} · ${dayData.type}`;
   $("day-title").textContent = `${selectedDay} — ${dayData.type}`;
 
+  const active = currentActivity(dayData.items);
   const next = currentOrNext(dayData.items);
+  const activityDone = getActivityDone();
+  const nextId = activityId(selectedDay, next);
+  const nextIsDone = activityDone.includes(nextId);
+
   $("next-title").textContent = next[2];
-  $("next-time").textContent = `${next[0]} – ${next[1]}`;
+  $("next-time").textContent = `${next[0]} – ${next[1]}${active ? " · in corso" : " · prossima"}`;
+  $("doneBtn").textContent = nextIsDone ? "Completata ✓" : "Fatta";
+  $("doneBtn").disabled = nextIsDone;
+  $("doneBtn").style.opacity = nextIsDone ? "0.65" : "1";
 
   const done = getDone();
 
   $("timeline").innerHTML = dayData.items.map((it, idx) => {
     const n = nowMinutes();
     const isCurrent = minutes(it[0]) <= n && n <= minutes(it[1]);
-    return `<div class="slot ${isCurrent ? "current" : ""}">
+    const id = activityId(selectedDay, it);
+    const isDone = activityDone.includes(id);
+    return `<div class="slot ${isCurrent ? "current" : ""} ${isDone ? "done-slot" : ""}" data-activity-id="${id}">
       <div class="time">${it[0]}<br>${it[1]}</div>
-      <div class="task">${it[2]}</div>
+      <div class="task">
+        <span>${it[2]}</span>
+        ${isDone ? `<span class="done-mark">Completata ✓</span>` : ``}
+      </div>
     </div>`;
   }).join("");
 
@@ -75,7 +108,7 @@ function render(){
     ["Tesi / lavoro", dayData.items.some(x => x[2].toLowerCase().includes("tesi"))],
     ["Inglese", dayData.items.some(x => x[2].toLowerCase().includes("inglese"))],
     ["Allenamento / movimento", dayData.items.some(x => /(palestra|tennis|camminata|stretching)/i.test(x[2]))],
-    ["Cena e routine sonno", dayData.items.some(x => x[2].toLowerCase().includes("routine sonno"))]
+    ["Cena e routine sonno", dayData.items.some(x => x[2].toLowerCase().includes("cena") || x[2].toLowerCase().includes("routine sonno"))]
   ].filter(x => x[1]).map(x => x[0]);
 
   $("checklist").innerHTML = essential.map(name => {
@@ -95,6 +128,7 @@ function render(){
     };
   });
 }
+
 async function init(){
   data = await fetch("routine-data.json").then(r => r.json());
   selectedDay = pickToday();
@@ -115,15 +149,30 @@ async function init(){
   $("rules").innerHTML = data.rules.map(r => `<li>${r}</li>`).join("");
 
   $("doneBtn").onclick = () => {
-    const next = currentOrNext(data.days[selectedDay].items);
+    const dayData = data.days[selectedDay];
+    const activeOrNext = currentOrNext(dayData.items);
+    const id = activityId(selectedDay, activeOrNext);
+
+    let activityDone = getActivityDone();
+    if(!activityDone.includes(id)) activityDone.push(id);
+    setActivityDone(activityDone);
+
+    // Aggiorna anche la checklist macro quando riconosce attività importanti
     let d = getDone();
-    if(!d.includes(next[2])) d.push(next[2]);
+    const title = activeOrNext[2].toLowerCase();
+
+    if(title.includes("tesi") && !d.includes("Tesi / lavoro")) d.push("Tesi / lavoro");
+    if(title.includes("inglese") && !d.includes("Inglese")) d.push("Inglese");
+    if(/palestra|tennis|camminata|stretching/i.test(activeOrNext[2]) && !d.includes("Allenamento / movimento")) d.push("Allenamento / movimento");
+    if((title.includes("cena") || title.includes("routine sonno")) && !d.includes("Cena e routine sonno")) d.push("Cena e routine sonno");
+
     setDone(d);
     render();
   };
 
   $("resetBtn").onclick = () => {
     localStorage.removeItem(completionKey());
+    localStorage.removeItem(activityDoneKey());
     render();
   };
 
