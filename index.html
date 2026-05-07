@@ -1,1 +1,214 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><title>Routine & Dieta</title><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"></head><body><main class="app"><header class="hero"><div><p class="eyebrow">Routine personale</p><h1>Routine & Dieta</h1><p id="subtitle">Caricamento...</p></div><button id="notifyBtn" class="ghost">Notifiche routine</button></header><nav class="macro-tabs"><button class="macro-tab active" data-macro="routineSec">Routine</button><button class="macro-tab" data-macro="dietSec">Dieta</button></nav><section id="routineSec" class="macro active"><nav class="tabs"><button class="tab active" data-tab="rtoday">Oggi</button><button class="tab" data-tab="rscore">Score</button><button class="tab" data-tab="rweek">Settimana</button></nav><section id="rtoday" class="page active"><section class="card status-card"><div><p class="label">Prossima attività</p><h2 id="nextTitle">—</h2><p id="nextTime">—</p></div><button id="doneBtn" class="primary">Fatta</button></section><section class="grid"><article class="card"><p class="label">Checklist fondamentale</p><div id="routineChecklist" class="checklist"></div></article><article class="card"><p class="label">Anti-rimorso di oggi</p><div id="rulesBox" class="rule-box"></div></article></section></section><section id="rscore" class="page"><section class="score-grid"><article class="card score-card"><p class="label">Oggi</p><h2 id="rDaily">—</h2><p id="rDailyText">—</p></article><article class="card score-card"><p class="label">Settimana</p><h2 id="rWeekly">—</h2><p id="rWeeklyText">—</p></article><article class="card score-card"><p class="label">Mese</p><h2 id="rMonthly">—</h2><p id="rMonthlyText">—</p></article></section><section class="card"><p class="label">Ultimi 7 giorni</p><div id="rBars" class="bars"></div></section></section><section id="rweek" class="page"><section class="card"><div class="section-head"><div><p class="label">Routine settimanale</p><h2 id="weekTitle">—</h2></div><select id="daySelect"></select></div><div id="timeline" class="timeline"></div></section></section></section><section id="dietSec" class="macro"><nav class="tabs diet-tabs"><button class="diet-tab active" data-tab="dtoday">Oggi</button><button class="diet-tab" data-tab="dscore">Score</button><button class="diet-tab" data-tab="renpho">Renpho</button><button class="diet-tab" data-tab="adapt">Check</button></nav><section id="dtoday" class="diet-page active"><section class="score-grid"><article class="card score-card"><p class="label">Target kcal</p><h2 id="kcalTarget">—</h2><p id="dayType">—</p></article><article class="card score-card"><p class="label">Acqua</p><h2 id="waterText">—</h2><p>Target 3 L</p></article><article class="card score-card"><p class="label">Score dieta</p><h2 id="dietScoreToday">—</h2><p id="dietScoreText">—</p></article></section><section class="card"><div class="section-head"><div><p class="label">Pasti</p><h2 id="dietDayTitle">—</h2></div><button id="addCheat" class="ghost">Aggiungi sgarro</button></div><div id="mealCards" class="meal-cards"></div></section><section class="card"><p class="label">Acqua</p><div id="bottles" class="bottles"></div></section><section class="card"><p class="label">Sgarri</p><div id="cheats" class="cheat-list"></div></section></section><section id="dscore" class="diet-page"><section class="score-grid"><article class="card score-card"><p class="label">Oggi</p><h2 id="dDaily">—</h2><p id="dDailyText">—</p></article><article class="card score-card"><p class="label">Settimana</p><h2 id="dWeekly">—</h2><p id="dWeeklyText">—</p></article><article class="card score-card"><p class="label">Mese</p><h2 id="dMonthly">—</h2><p id="dMonthlyText">—</p></article></section><section class="card"><p class="label">Componenti score</p><div id="dietComponents" class="habit-breakdown"></div></section><section class="card"><p class="label">Ultimi 7 giorni dieta</p><div id="dBars" class="bars"></div></section></section><section id="renpho" class="diet-page"><section class="card"><p class="label">Dati mattina</p><h2>Inserisci dati Renpho</h2><div class="form-grid"><label>Peso kg<input id="w" type="number" step="0.01" placeholder="83.95"></label><label>Massa grassa %<input id="bf" type="number" step="0.1" placeholder="14.4"></label><label>BMR kcal<input id="bmr" type="number" step="1" placeholder="1900"></label></div><button id="saveRenpho" class="primary wide">Salva dati di oggi</button></section><section class="card"><p class="label">Trend</p><div id="trend" class="trend-box"></div></section></section><section id="adapt" class="diet-page"><section class="card"><p class="label">Check settimanale</p><h2>Adattamento quantità</h2><p class="muted">Serve confrontare la media peso degli ultimi 7 giorni con i 7 precedenti.</p><button id="runAdapt" class="primary wide">Calcola feedback</button><div id="adaptBox" class="feedback-box"></div></section><section class="card"><p class="label">Regole</p><div class="rule-box"><div class="rule">Target: -0.3 / -0.7 kg a settimana.</div><div class="rule">Se scendi poco e aderenza buona: riduci 100–150 kcal/die.</div><div class="rule">Se scendi troppo: aumenta 100–150 kcal/die.</div><div class="rule">Ordine tagli: burro d'arachidi → pane snack → pane colazione → pasta → olio.</div></div></section></section></section><div id="mealModal" class="modal hidden"><div class="modal-card"><button id="closeMeal" class="close">×</button><p id="modalType" class="label">Pasto</p><h2 id="modalTitle">—</h2><div id="modalItems" class="meal-items"></div><p id="modalNotes" class="muted"></p><div class="modal-actions"><button id="confirmMeal" class="primary">Conferma</button><button id="skipMeal" class="ghost">Salta</button><button id="replaceCheat" class="danger">Sostituisci con sgarro</button></div></div></div><div id="cheatModal" class="modal hidden"><div class="modal-card"><button id="closeCheat" class="close">×</button><p class="label">Sgarro</p><h2>Inserisci sgarro</h2><div class="form-grid"><label>Descrizione<input id="cheatDesc" type="text" placeholder="pizza, burger, drink..."></label><label>Calorie<input id="cheatKcal" type="number" step="10" placeholder="800"></label><label>Drink/birre<input id="cheatDrinks" type="number" step="1" placeholder="0"></label></div><button id="saveCheat" class="primary wide">Salva sgarro</button></div></div><footer><button id="resetRoutine" class="text-button">Reset routine oggi</button><button id="resetDiet" class="text-button">Reset dieta oggi</button><p>Obiettivo: 80 kg. BMR attuale: 1900 kcal. Target iniziale: -0.5 kg/settimana.</p></footer></main><script src="data.js"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>Routine & Dieta</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Routine personale</p>
+      <h1>Routine & Dieta</h1>
+      <p id="subtitle">Caricamento...</p>
+    </div>
+    <button id="notifyBtn" class="ghost">Notifiche routine</button>
+  </header>
+
+  <nav class="macro-tabs">
+    <button class="macro-tab active" data-macro="routineSec">Routine</button>
+    <button class="macro-tab" data-macro="dietSec">Dieta</button>
+  </nav>
+
+  <section id="routineSec" class="macro active">
+    <nav class="tabs">
+      <button class="tab active" data-tab="rtoday">Oggi</button>
+      <button class="tab" data-tab="rscore">Score</button>
+      <button class="tab" data-tab="rweek">Settimana</button>
+    </nav>
+
+    <section id="rtoday" class="page active">
+      <section class="card status-card">
+        <div>
+          <p class="label">Prossima attività</p>
+          <h2 id="nextTitle">—</h2>
+          <p id="nextTime">—</p>
+        </div>
+        <button id="doneBtn" class="primary">Fatta</button>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <p class="label">Checklist fondamentale</p>
+          <div id="routineChecklist" class="checklist"></div>
+        </article>
+        <article class="card">
+          <p class="label">Anti-rimorso di oggi</p>
+          <div id="rulesBox" class="rule-box"></div>
+        </article>
+      </section>
+    </section>
+
+    <section id="rscore" class="page">
+      <section class="score-grid">
+        <article class="card score-card"><p class="label">Oggi</p><h2 id="rDaily">—</h2><p id="rDailyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Settimana</p><h2 id="rWeekly">—</h2><p id="rWeeklyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Mese</p><h2 id="rMonthly">—</h2><p id="rMonthlyTxt">—</p></article>
+      </section>
+      <section class="card"><p class="label">Ultimi 7 giorni</p><div id="rBars" class="bars"></div></section>
+      <section class="card"><p class="label">Dettaglio</p><div id="rHabits" class="habit-breakdown"></div></section>
+    </section>
+
+    <section id="rweek" class="page">
+      <section class="card">
+        <div class="section-head">
+          <div><p class="label">Routine settimanale</p><h2 id="selectedDayTitle">—</h2></div>
+          <select id="daySelect"></select>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+    </section>
+  </section>
+
+  <section id="dietSec" class="macro">
+    <nav class="tabs diet-tabs">
+      <button class="diet-tab active" data-diettab="dtoday">Oggi</button>
+      <button class="diet-tab" data-diettab="dscore">Score</button>
+      <button class="diet-tab" data-diettab="drenpho">Renpho</button>
+      <button class="diet-tab" data-diettab="dcustom">Pasto pulito</button>
+      <button class="diet-tab" data-diettab="dcheck">Check</button>
+    </nav>
+
+    <section id="dtoday" class="diet-page active">
+      <section class="score-grid">
+        <article class="card score-card"><p class="label">Calorie target</p><h2 id="dietTarget">—</h2><p id="dietType">—</p></article>
+        <article class="card score-card"><p class="label">Acqua</p><h2 id="waterText">—</h2><p>Target 3 L</p></article>
+        <article class="card score-card"><p class="label">Score dieta oggi</p><h2 id="dietTodayScore">—</h2><p id="dietTodayTxt">—</p></article>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div><p class="label">Pasti di oggi</p><h2 id="dietTodayTitle">—</h2></div>
+          <button id="addCheatBtn" class="ghost">Aggiungi sgarro</button>
+        </div>
+        <div id="mealCards" class="meal-cards"></div>
+      </section>
+
+      <section class="card">
+        <p class="label">Acqua</p>
+        <div id="waterBottles" class="bottles"></div>
+      </section>
+
+      <section class="card">
+        <p class="label">Sgarri di oggi</p>
+        <div id="cheatList" class="cheat-list"></div>
+      </section>
+    </section>
+
+    <section id="dscore" class="diet-page">
+      <section class="score-grid">
+        <article class="card score-card"><p class="label">Oggi</p><h2 id="dDaily">—</h2><p id="dDailyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Settimana</p><h2 id="dWeekly">—</h2><p id="dWeeklyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Mese</p><h2 id="dMonthly">—</h2><p id="dMonthlyTxt">—</p></article>
+      </section>
+      <section class="card"><p class="label">Componenti score</p><div id="dComponents" class="habit-breakdown"></div></section>
+      <section class="card"><p class="label">Ultimi 7 giorni</p><div id="dBars" class="bars"></div></section>
+    </section>
+
+    <section id="drenpho" class="diet-page">
+      <section class="card">
+        <p class="label">Dati mattina</p>
+        <h2>Inserisci dati Renpho</h2>
+        <div class="form-grid">
+          <label>Peso kg<input id="renphoWeight" type="number" step="0.01" placeholder="83.95"></label>
+          <label>Massa grassa %<input id="renphoFat" type="number" step="0.1" placeholder="14.4"></label>
+          <label>BMR kcal<input id="renphoBmr" type="number" step="1" placeholder="1900"></label>
+        </div>
+        <button id="saveRenphoBtn" class="primary wide">Salva dati di oggi</button>
+      </section>
+      <section class="card"><p class="label">Trend peso</p><div id="renphoTrend" class="trend-box"></div></section>
+    </section>
+
+    <section id="dcustom" class="diet-page">
+      <section class="card">
+        <p class="label">Pasto non sgarro</p>
+        <h2>Calcola quantità da ingredienti puliti</h2>
+        <p class="muted">È un calcolatore offline: scegli ingredienti e target kcal, l’app propone quantità coerenti con il cut.</p>
+        <div class="form-grid">
+          <label>Target kcal pasto<input id="customKcal" type="number" step="10" value="650"></label>
+          <label>Carboidrato<select id="customCarb"></select></label>
+          <label>Proteina<select id="customProtein"></select></label>
+          <label>Verdura<select id="customVeg"></select></label>
+          <label>Olio<select id="customOil"><option value="yes">5 g max</option><option value="no">No olio</option></select></label>
+          <label>Passata<select id="customPassata"><option value="yes">Sì</option><option value="no">No</option></select></label>
+        </div>
+        <button id="calcCustomMealBtn" class="primary wide">Calcola quantità</button>
+      </section>
+      <section class="card"><p class="label">Risultato</p><div id="customMealResult" class="meal-items"></div></section>
+    </section>
+
+    <section id="dcheck" class="diet-page">
+      <section class="card">
+        <p class="label">Check settimanale</p>
+        <h2>Adattamento quantità</h2>
+        <p class="muted">Basato sulla media peso degli ultimi 7 giorni rispetto ai 7 giorni precedenti.</p>
+        <button id="runAdaptBtn" class="primary wide">Calcola feedback settimanale</button>
+        <div id="adaptFeedback" class="feedback-box"></div>
+      </section>
+      <section class="card">
+        <p class="label">Regole</p>
+        <div class="rule-box">
+          <div class="rule">Target: -0.3 / -0.7 kg a settimana.</div>
+          <div class="rule">Se sei in range: mantieni quantità.</div>
+          <div class="rule">Se scendi poco con buona aderenza: -100/150 kcal al giorno.</div>
+          <div class="rule">Se scendi troppo: +100/150 kcal al giorno.</div>
+          <div class="rule">Ordine tagli: burro d’arachidi → pane snack → pane colazione → pasta → olio.</div>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <div id="mealModal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeMealBtn" class="close">×</button>
+      <p class="label" id="modalMealType">Pasto</p>
+      <h2 id="modalMealTitle">—</h2>
+      <div id="modalMealItems" class="meal-items"></div>
+      <p id="modalMealNotes" class="muted"></p>
+      <div class="modal-actions">
+        <button id="confirmMealBtn" class="primary">Conferma</button>
+        <button id="skipMealBtn" class="ghost">Salta</button>
+        <button id="replaceCheatBtn" class="danger">Sostituisci con sgarro</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cheatModal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeCheatBtn" class="close">×</button>
+      <p class="label">Sgarro</p>
+      <h2>Inserisci sgarro</h2>
+      <div class="form-grid">
+        <label>Descrizione<input id="cheatDesc" type="text" placeholder="pizza, burger, drink..."></label>
+        <label>Calorie stimate<input id="cheatKcal" type="number" step="10" placeholder="800"></label>
+        <label>Drink / birre<input id="cheatDrinks" type="number" step="1" placeholder="0"></label>
+      </div>
+      <button id="saveCheatBtn" class="primary wide">Salva sgarro</button>
+    </div>
+  </div>
+
+  <footer>
+    <button id="resetRoutineBtn" class="text-button">Reset routine di oggi</button>
+    <button id="resetDietBtn" class="text-button">Reset dieta di oggi</button>
+    <p>v1.2 · Cena di oggi e pranzo di domani allineati alla schiscetta.</p>
+  </footer>
+</main>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
