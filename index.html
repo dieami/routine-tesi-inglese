@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>Routine Tesi & Inglese</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Routine personale</p>
+        <h1>Routine Tesi & Inglese</h1>
+        <p id="today-subtitle">Caricamento...</p>
+      </div>
+      <button id="notifyBtn" class="ghost">Attiva notifiche</button>
+    </header>
+
+    <section class="card status-card">
+      <div>
+        <p class="label">Prossima attività</p>
+        <h2 id="next-title">—</h2>
+        <p id="next-time">—</p>
+      </div>
+      <button id="doneBtn" class="primary">Fatta</button>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <p class="label">Checklist di oggi</p>
+        <div id="checklist" class="checklist"></div>
+      </article>
+
+      <article class="card">
+        <p class="label">Regole anti-rimorso</p>
+        <ul id="rules"></ul>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <p class="label">Giornata</p>
+          <h2 id="day-title">—</h2>
+        </div>
+        <select id="daySelect" aria-label="Scegli giorno"></select>
+      </div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <footer>
+      <button id="resetBtn" class="text-button">Reset completati di oggi</button>
+      <p>Consiglio: apri l’app al mattino per “armare” i promemoria locali.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

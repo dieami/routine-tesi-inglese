@@ -1,0 +1,517 @@
+{
+  "appName": "Routine Tesi & Inglese",
+  "days": {
+    "Lunedì": {
+      "type": "Palestra",
+      "items": [
+        [
+          "07:30",
+          "08:15",
+          "Sveglia, colazione, preparazione"
+        ],
+        [
+          "08:15",
+          "08:45",
+          "Spostamento verso lavoro"
+        ],
+        [
+          "09:00",
+          "11:00",
+          "Tesi: scrittura profonda"
+        ],
+        [
+          "11:00",
+          "11:15",
+          "Pausa caffè"
+        ],
+        [
+          "11:15",
+          "12:30",
+          "Tesi: scrittura"
+        ],
+        [
+          "12:30",
+          "13:30",
+          "Pranzo"
+        ],
+        [
+          "13:30",
+          "15:00",
+          "Tesi: revisione/scrittura"
+        ],
+        [
+          "15:00",
+          "15:15",
+          "Caffè opzionale"
+        ],
+        [
+          "15:15",
+          "16:30",
+          "Tesi leggera: figure, bibliografia, correzioni"
+        ],
+        [
+          "16:30",
+          "17:00",
+          "Rientro"
+        ],
+        [
+          "17:00",
+          "17:30",
+          "Snack + cambio"
+        ],
+        [
+          "17:30",
+          "19:00",
+          "Palestra"
+        ],
+        [
+          "19:15",
+          "20:00",
+          "Cena"
+        ],
+        [
+          "20:30",
+          "21:15",
+          "Inglese"
+        ],
+        [
+          "21:15",
+          "22:00",
+          "Doccia / organizzazione"
+        ],
+        [
+          "22:00",
+          "23:15",
+          "Serie TV / relax"
+        ],
+        [
+          "23:15",
+          "23:45",
+          "Routine sonno"
+        ]
+      ]
+    },
+    "Martedì": {
+      "type": "Palestra",
+      "items": [
+        [
+          "07:30",
+          "08:15",
+          "Sveglia, colazione, preparazione"
+        ],
+        [
+          "08:15",
+          "08:45",
+          "Spostamento verso lavoro"
+        ],
+        [
+          "09:00",
+          "11:00",
+          "Tesi: scrittura profonda"
+        ],
+        [
+          "11:00",
+          "11:15",
+          "Pausa caffè"
+        ],
+        [
+          "11:15",
+          "12:30",
+          "Tesi: scrittura"
+        ],
+        [
+          "12:30",
+          "13:30",
+          "Pranzo"
+        ],
+        [
+          "13:30",
+          "15:00",
+          "Tesi: revisione/scrittura"
+        ],
+        [
+          "15:00",
+          "15:15",
+          "Caffè opzionale"
+        ],
+        [
+          "15:15",
+          "16:30",
+          "Tesi leggera: figure, bibliografia, correzioni"
+        ],
+        [
+          "16:30",
+          "17:00",
+          "Rientro"
+        ],
+        [
+          "17:00",
+          "17:30",
+          "Snack + cambio"
+        ],
+        [
+          "17:30",
+          "19:00",
+          "Palestra"
+        ],
+        [
+          "19:15",
+          "20:00",
+          "Cena"
+        ],
+        [
+          "20:30",
+          "21:15",
+          "Inglese"
+        ],
+        [
+          "21:15",
+          "22:00",
+          "Doccia / organizzazione"
+        ],
+        [
+          "22:00",
+          "23:15",
+          "Serie TV / relax"
+        ],
+        [
+          "23:15",
+          "23:45",
+          "Routine sonno"
+        ]
+      ]
+    },
+    "Mercoledì": {
+      "type": "Inglese lungo + recupero",
+      "items": [
+        [
+          "07:30",
+          "08:15",
+          "Sveglia, colazione, preparazione"
+        ],
+        [
+          "08:15",
+          "08:45",
+          "Spostamento verso lavoro"
+        ],
+        [
+          "09:00",
+          "11:00",
+          "Tesi: scrittura profonda"
+        ],
+        [
+          "11:00",
+          "11:15",
+          "Pausa caffè"
+        ],
+        [
+          "11:15",
+          "12:30",
+          "Tesi: scrittura"
+        ],
+        [
+          "12:30",
+          "13:30",
+          "Pranzo"
+        ],
+        [
+          "13:30",
+          "15:00",
+          "Tesi: revisione/scrittura"
+        ],
+        [
+          "15:00",
+          "15:15",
+          "Caffè opzionale"
+        ],
+        [
+          "15:15",
+          "16:30",
+          "Tesi leggera: figure, bibliografia, correzioni"
+        ],
+        [
+          "16:30",
+          "17:00",
+          "Rientro"
+        ],
+        [
+          "17:00",
+          "18:00",
+          "Camminata / stretching"
+        ],
+        [
+          "18:00",
+          "19:00",
+          "Inglese serio"
+        ],
+        [
+          "19:00",
+          "20:00",
+          "Cena"
+        ],
+        [
+          "20:00",
+          "21:00",
+          "Organizzazione / recupero leggero"
+        ],
+        [
+          "21:00",
+          "22:15",
+          "Tempo libero"
+        ],
+        [
+          "22:15",
+          "23:15",
+          "Serie TV"
+        ],
+        [
+          "23:15",
+          "23:45",
+          "Routine sonno"
+        ]
+      ]
+    },
+    "Giovedì": {
+      "type": "Tennis",
+      "items": [
+        [
+          "07:30",
+          "08:15",
+          "Sveglia, colazione, preparazione"
+        ],
+        [
+          "08:15",
+          "08:45",
+          "Spostamento verso lavoro"
+        ],
+        [
+          "09:00",
+          "11:00",
+          "Tesi: scrittura profonda"
+        ],
+        [
+          "11:00",
+          "11:15",
+          "Pausa caffè"
+        ],
+        [
+          "11:15",
+          "12:30",
+          "Tesi: scrittura"
+        ],
+        [
+          "12:30",
+          "13:30",
+          "Pranzo"
+        ],
+        [
+          "13:30",
+          "15:00",
+          "Tesi: revisione/scrittura"
+        ],
+        [
+          "15:00",
+          "15:15",
+          "Caffè opzionale"
+        ],
+        [
+          "15:15",
+          "16:30",
+          "Tesi leggera: figure, bibliografia, correzioni"
+        ],
+        [
+          "16:30",
+          "17:15",
+          "Rientro + snack + preparazione"
+        ],
+        [
+          "17:30",
+          "20:00",
+          "Tennis"
+        ],
+        [
+          "20:15",
+          "21:00",
+          "Cena"
+        ],
+        [
+          "21:15",
+          "21:45",
+          "Inglese minimo"
+        ],
+        [
+          "22:00",
+          "23:15",
+          "Relax"
+        ],
+        [
+          "23:15",
+          "23:45",
+          "Routine sonno"
+        ]
+      ]
+    },
+    "Venerdì": {
+      "type": "Palestra",
+      "items": [
+        [
+          "07:30",
+          "08:15",
+          "Sveglia, colazione, preparazione"
+        ],
+        [
+          "08:15",
+          "08:45",
+          "Spostamento verso lavoro"
+        ],
+        [
+          "09:00",
+          "11:00",
+          "Tesi: scrittura profonda"
+        ],
+        [
+          "11:00",
+          "11:15",
+          "Pausa caffè"
+        ],
+        [
+          "11:15",
+          "12:30",
+          "Tesi: scrittura"
+        ],
+        [
+          "12:30",
+          "13:30",
+          "Pranzo"
+        ],
+        [
+          "13:30",
+          "15:00",
+          "Tesi: revisione/scrittura"
+        ],
+        [
+          "15:00",
+          "15:15",
+          "Caffè opzionale"
+        ],
+        [
+          "15:15",
+          "16:30",
+          "Tesi leggera: figure, bibliografia, correzioni"
+        ],
+        [
+          "16:30",
+          "17:00",
+          "Rientro"
+        ],
+        [
+          "17:00",
+          "17:30",
+          "Snack + cambio"
+        ],
+        [
+          "17:30",
+          "19:00",
+          "Palestra"
+        ],
+        [
+          "19:15",
+          "20:00",
+          "Cena"
+        ],
+        [
+          "20:30",
+          "21:15",
+          "Inglese"
+        ],
+        [
+          "21:15",
+          "22:00",
+          "Doccia / organizzazione"
+        ],
+        [
+          "22:00",
+          "23:15",
+          "Serie TV / relax"
+        ],
+        [
+          "23:15",
+          "23:45",
+          "Routine sonno"
+        ]
+      ]
+    },
+    "Sabato": {
+      "type": "Tesi leggera + palestra",
+      "items": [
+        [
+          "09:00",
+          "10:00",
+          "Sveglia + colazione lenta"
+        ],
+        [
+          "10:00",
+          "12:00",
+          "Tesi leggera: revisione, scaletta, figure, bibliografia"
+        ],
+        [
+          "12:00",
+          "12:45",
+          "Inglese"
+        ],
+        [
+          "13:00",
+          "14:00",
+          "Pranzo"
+        ],
+        [
+          "16:00",
+          "17:30",
+          "Palestra"
+        ],
+        [
+          "18:00",
+          "23:30",
+          "Sera libera"
+        ]
+      ]
+    },
+    "Domenica": {
+      "type": "Riposo / recupero",
+      "items": [
+        [
+          "09:30",
+          "10:30",
+          "Sveglia libera + colazione"
+        ],
+        [
+          "10:30",
+          "16:30",
+          "Relax, vita normale, passeggiata"
+        ],
+        [
+          "17:00",
+          "18:00",
+          "Recupero solo se necessario"
+        ],
+        [
+          "18:00",
+          "18:30",
+          "Planning settimana"
+        ],
+        [
+          "18:30",
+          "23:30",
+          "Cena + riposo"
+        ]
+      ]
+    }
+  },
+  "rules": [
+    "Inglese: minimo 30 minuti al giorno. Mai più di un giorno consecutivo senza inglese.",
+    "Se salti palestra: scala l'allenamento al giorno dopo o al sabato. Non recuperare due palestre nello stesso giorno.",
+    "Se salti tesi: il giorno dopo aggiungi 45 minuti serali oppure usa il blocco sabato 10:00–12:00.",
+    "Se hai un'uscita: fai almeno inglese minimo prima di uscire e non trasformare l'imprevisto in fallimento della settimana.",
+    "La domenica è riposo vero. Recupero solo se è saltata un'attività fondamentale."
+  ]
+}
