@@ -19,41 +19,86 @@
       <button id="notifyBtn" class="ghost">Attiva notifiche</button>
     </header>
 
-    <section class="card status-card">
-      <div>
-        <p class="label">Prossima attività</p>
-        <h2 id="next-title">—</h2>
-        <p id="next-time">—</p>
-      </div>
-      <button id="doneBtn" class="primary">Fatta</button>
-    </section>
+    <nav class="tabs" aria-label="Navigazione app">
+      <button class="tab active" data-tab="todayPage">Oggi</button>
+      <button class="tab" data-tab="scorePage">Score</button>
+      <button class="tab" data-tab="routinePage">Routine</button>
+    </nav>
 
-    <section class="grid">
-      <article class="card">
-        <p class="label">Checklist di oggi</p>
-        <div id="checklist" class="checklist"></div>
-      </article>
-
-      <article class="card">
-        <p class="label">Regole anti-rimorso</p>
-        <ul id="rules"></ul>
-      </article>
-    </section>
-
-    <section class="card">
-      <div class="section-head">
+    <section id="todayPage" class="page active">
+      <section class="card status-card">
         <div>
-          <p class="label">Giornata</p>
-          <h2 id="day-title">—</h2>
+          <p class="label">Prossima attività</p>
+          <h2 id="next-title">—</h2>
+          <p id="next-time">—</p>
         </div>
-        <select id="daySelect" aria-label="Scegli giorno"></select>
-      </div>
-      <div id="timeline" class="timeline"></div>
+        <button id="doneBtn" class="primary">Fatta</button>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <p class="label">Checklist fondamentale</p>
+          <div id="checklist" class="checklist"></div>
+        </article>
+
+        <article class="card">
+          <p class="label">Anti-rimorso di oggi</p>
+          <div id="todayRules" class="rule-box"></div>
+        </article>
+      </section>
+    </section>
+
+    <section id="scorePage" class="page">
+      <section class="score-grid">
+        <article class="card score-card">
+          <p class="label">Score oggi</p>
+          <h2 id="dailyScore">—</h2>
+          <p id="dailyScoreText">—</p>
+        </article>
+        <article class="card score-card">
+          <p class="label">Score settimana</p>
+          <h2 id="weeklyScore">—</h2>
+          <p id="weeklyScoreText">—</p>
+        </article>
+        <article class="card score-card">
+          <p class="label">Score mese</p>
+          <h2 id="monthlyScore">—</h2>
+          <p id="monthlyScoreText">—</p>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <p class="label">Ultimi 7 giorni</p>
+            <h2>Andamento</h2>
+          </div>
+        </div>
+        <div id="weeklyBars" class="bars"></div>
+      </section>
+
+      <section class="card">
+        <p class="label">Dettaglio abitudini</p>
+        <div id="habitBreakdown" class="habit-breakdown"></div>
+      </section>
+    </section>
+
+    <section id="routinePage" class="page">
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <p class="label">Giornata</p>
+            <h2 id="day-title">—</h2>
+          </div>
+          <select id="daySelect" aria-label="Scegli giorno"></select>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
     </section>
 
     <footer>
       <button id="resetBtn" class="text-button">Reset completati di oggi</button>
-      <p>Consiglio: apri l’app al mattino per “armare” i promemoria locali.</p>
+      <p>Le tre cose fondamentali sono: tesi, inglese, allenamento. Il resto è organizzazione, non identità.</p>
     </footer>
   </main>
 

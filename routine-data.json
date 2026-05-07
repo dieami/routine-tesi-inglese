@@ -508,10 +508,10 @@
     }
   },
   "rules": [
-    "Inglese: minimo 30 minuti al giorno. Mai più di un giorno consecutivo senza inglese.",
-    "Se salti palestra: scala l'allenamento al giorno dopo o al sabato. Non recuperare due palestre nello stesso giorno.",
-    "Se salti tesi: il giorno dopo aggiungi 45 minuti serali oppure usa il blocco sabato 10:00–12:00.",
-    "Se hai un'uscita: fai almeno inglese minimo prima di uscire e non trasformare l'imprevisto in fallimento della settimana.",
-    "La domenica è riposo vero. Recupero solo se è saltata un'attività fondamentale."
+    "Se oggi salti inglese: fai 30 minuti entro sera, oppure recupera domani con +15 minuti.",
+    "Se oggi salti allenamento: spostalo al prossimo slot libero. Non fare due recuperi nello stesso giorno.",
+    "Se oggi salti tesi: aggiungi 45 minuti domani oppure usa il blocco sabato 10:00–12:00.",
+    "Se oggi hai un'uscita: salva almeno inglese minimo e non trasformare l'imprevisto in fallimento.",
+    "Se oggi è domenica: recupero solo se hai saltato una cosa fondamentale nella settimana."
   ]
 }
