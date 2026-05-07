@@ -1,11 +1,11 @@
 {
-  "name": "Routine Tesi & Inglese",
-  "short_name": "Routine",
+  "name": "Routine & Dieta",
+  "short_name": "RoutineDieta",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#111827",
-  "description": "Routine giornaliera per tesi, inglese, allenamento, pasti e sonno.",
+  "description": "Routine, dieta, acqua, Renpho e score personali.",
   "icons": [
     {
       "src": "icons/icon-192.png",
