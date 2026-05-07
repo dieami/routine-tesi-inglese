@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#111827">
-  <title>Routine & Dieta</title>
+  <title>Routine, Dieta & Allenamento</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,7 +13,7 @@
   <header class="hero">
     <div>
       <p class="eyebrow">Routine personale</p>
-      <h1>Routine & Dieta</h1>
+      <h1>Routine, Dieta & Allenamento</h1>
       <p id="subtitle">Caricamento...</p>
     </div>
     <button id="notifyBtn" class="ghost">Notifiche routine</button>
@@ -22,6 +22,7 @@
   <nav class="macro-tabs">
     <button class="macro-tab active" data-macro="routineSec">Routine</button>
     <button class="macro-tab" data-macro="dietSec">Dieta</button>
+    <button class="macro-tab" data-macro="trainingSec">Allenamento</button>
   </nav>
 
   <section id="routineSec" class="macro active">
@@ -137,7 +138,7 @@
       <section class="card">
         <p class="label">Pasto non sgarro</p>
         <h2>Calcola quantità da ingredienti puliti</h2>
-        <p class="muted">È un calcolatore offline: scegli ingredienti e target kcal, l’app propone quantità coerenti con il cut.</p>
+        <p class="muted">Scegli ingredienti e target kcal, l’app propone quantità coerenti con il cut.</p>
         <div class="form-grid">
           <label>Target kcal pasto<input id="customKcal" type="number" step="10" value="650"></label>
           <label>Carboidrato<select id="customCarb"></select></label>
@@ -159,15 +160,58 @@
         <button id="runAdaptBtn" class="primary wide">Calcola feedback settimanale</button>
         <div id="adaptFeedback" class="feedback-box"></div>
       </section>
+    </section>
+  </section>
+
+  <section id="trainingSec" class="macro">
+    <nav class="tabs training-tabs">
+      <button class="training-tab active" data-trainingtab="ttoday">Oggi</button>
+      <button class="training-tab" data-trainingtab="tscore">Score</button>
+      <button class="training-tab" data-trainingtab="thistory">Storico</button>
+      <button class="training-tab" data-trainingtab="tweek">Settimana</button>
+    </nav>
+
+    <section id="ttoday" class="training-page active">
+      <section class="score-grid">
+        <article class="card score-card"><p class="label">Seduta</p><h2 id="trainingTodayType">—</h2><p id="trainingTodayName">—</p></article>
+        <article class="card score-card"><p class="label">Completamento</p><h2 id="trainingCompletion">—</h2><p id="trainingCompletionTxt">—</p></article>
+        <article class="card score-card"><p class="label">Progressione</p><h2 id="trainingProgression">—</h2><p id="trainingProgressionTxt">—</p></article>
+      </section>
+
       <section class="card">
-        <p class="label">Regole</p>
-        <div class="rule-box">
-          <div class="rule">Target: -0.3 / -0.7 kg a settimana.</div>
-          <div class="rule">Se sei in range: mantieni quantità.</div>
-          <div class="rule">Se scendi poco con buona aderenza: -100/150 kcal al giorno.</div>
-          <div class="rule">Se scendi troppo: +100/150 kcal al giorno.</div>
-          <div class="rule">Ordine tagli: burro d’arachidi → pane snack → pane colazione → pasta → olio.</div>
+        <div class="section-head">
+          <div>
+            <p class="label">Allenamento di oggi</p>
+            <h2 id="trainingTitle">—</h2>
+            <p id="trainingNotes" class="muted">—</p>
+          </div>
+          <button id="completeWorkoutBtn" class="primary">Completa allenamento</button>
         </div>
+        <div id="exerciseCards" class="exercise-cards"></div>
+      </section>
+    </section>
+
+    <section id="tscore" class="training-page">
+      <section class="score-grid">
+        <article class="card score-card"><p class="label">Oggi</p><h2 id="tDaily">—</h2><p id="tDailyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Settimana</p><h2 id="tWeekly">—</h2><p id="tWeeklyTxt">—</p></article>
+        <article class="card score-card"><p class="label">Mese</p><h2 id="tMonthly">—</h2><p id="tMonthlyTxt">—</p></article>
+      </section>
+      <section class="card"><p class="label">Ultimi 7 giorni allenamento</p><div id="tBars" class="bars"></div></section>
+      <section class="card"><p class="label">Componenti score</p><div id="tComponents" class="habit-breakdown"></div></section>
+    </section>
+
+    <section id="thistory" class="training-page">
+      <section class="card">
+        <p class="label">Ultimi carichi per esercizio</p>
+        <div id="exerciseHistory" class="habit-breakdown"></div>
+      </section>
+    </section>
+
+    <section id="tweek" class="training-page">
+      <section class="card">
+        <p class="label">Split settimanale</p>
+        <div id="trainingWeek" class="timeline"></div>
       </section>
     </section>
   </section>
@@ -201,10 +245,42 @@
     </div>
   </div>
 
+  <div id="exerciseModal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeExerciseBtn" class="close">×</button>
+      <p class="label" id="exerciseCategory">Esercizio</p>
+      <h2 id="exerciseTitle">—</h2>
+      <p id="exerciseLastInfo" class="muted">—</p>
+
+      <div class="form-grid two">
+        <label>Carico usato<input id="exerciseLoad" type="number" step="0.5"></label>
+        <label>Unità<input id="exerciseUnit" type="text" readonly></label>
+      </div>
+
+      <p class="label space-top">Serie e ripetizioni</p>
+      <div id="setsBox" class="sets-box"></div>
+      <button id="addSetBtn" class="ghost wide">+ Aggiungi serie</button>
+
+      <p class="label space-top">Difficoltà finale</p>
+      <div class="difficulty-row">
+        <button class="difficulty" data-difficulty="easy">🙂<span>Facile</span></button>
+        <button class="difficulty" data-difficulty="ok">😐<span>Giusto</span></button>
+        <button class="difficulty" data-difficulty="hard">🙁<span>Difficile</span></button>
+      </div>
+
+      <label class="space-top">Nota / promemoria per la prossima volta
+        <input id="exerciseNote" type="text" placeholder="es. aumentare, mantenere, ridurre, tecnica...">
+      </label>
+
+      <button id="saveExerciseBtn" class="primary wide">Salva esercizio</button>
+    </div>
+  </div>
+
   <footer>
     <button id="resetRoutineBtn" class="text-button">Reset routine di oggi</button>
     <button id="resetDietBtn" class="text-button">Reset dieta di oggi</button>
-    <p>v1.2 · Cena di oggi e pranzo di domani allineati alla schiscetta.</p>
+    <button id="resetTrainingBtn" class="text-button">Reset allenamento di oggi</button>
+    <p>v1.3 · Routine + Dieta + Allenamento.</p>
   </footer>
 </main>
 

@@ -4,6 +4,8 @@ const days = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"
 const ESS = ["Tesi","Inglese","Allenamento"];
 let selectedDay = todayName();
 let selectedMealType = null;
+let selectedExerciseId = null;
+let selectedDifficulty = null;
 
 const $ = id => document.getElementById(id);
 
@@ -31,13 +33,22 @@ function cheats(dk=dateKey()){ return getStore(key("diet_cheats",dk), []); }
 function setCheats(v,dk=dateKey()){ setStore(key("diet_cheats",dk), v); }
 function renpho(dk=dateKey()){ return getStore(key("renpho",dk), null); }
 function setRenpho(v,dk=dateKey()){ setStore(key("renpho",dk), v); }
+function trainingLog(dk=dateKey()){ return getStore(key("training_log",dk), {}); }
+function setTrainingLog(v,dk=dateKey()){ setStore(key("training_log",dk), v); }
+function exerciseLast(exId){ return getStore(`exercise_last_${exId}`, null); }
+function setExerciseLast(exId, v){ setStore(`exercise_last_${exId}`, v); }
 
 function routine(){ return D.routine; }
 function diet(){ return D.diet; }
+function training(){ return D.training; }
 
 function isWorkoutDay(day=todayName()){
   const type = routine()[day]?.type?.toLowerCase() || "";
   return type.includes("palestra") || type.includes("tennis") || type.includes("cardio");
+}
+function hasWeights(day=todayName()){
+  const sid = training().split[day];
+  return sid && !["rest","tennis_cardio"].includes(sid);
 }
 function essentials(day=todayName()){
   const arr = ["Tesi","Inglese"];
@@ -65,6 +76,25 @@ function mealTypeFromTitle(title){
   if(t.includes("spuntino")) return "snack";
   return null;
 }
+function markRoutineEssential(name){
+  let d = done();
+  if(!d.includes(name)) d.push(name);
+  setDone(d);
+}
+function markTrainingRoutineDone(){
+  markRoutineEssential("Allenamento");
+  const items = routine()[todayName()].items;
+  const idx = items.findIndex(it => /palestra|tennis|cardio/i.test(it[2]));
+  if(idx >= 0){
+    const item = items[idx];
+    let a = actDone();
+    const id = activityId(todayName(), item);
+    if(!a.includes(id)) a.push(id);
+    setAct(a);
+  }
+}
+
+/* DIET */
 function mealKey(type, day=todayName()){
   const rot = diet().rotation[day];
   if(type==="breakfast") return "breakfast";
@@ -128,7 +158,7 @@ function renderRoutine(){
 function ruleForMissing(x){
   if(x==="Tesi") return "Tesi: se oggi salta, recupero pulito domani con +45 min o sabato 10:00–12:00.";
   if(x==="Inglese") return "Inglese: fai almeno 30 min entro sera. Se salta, domani +15 min.";
-  return "Allenamento: se salta, spostalo al prossimo slot libero. Non fare due recuperi nello stesso giorno.";
+  return "Allenamento: se lo completi dalla sezione Allenamento, si aggiorna automaticamente anche qui.";
 }
 function renderRoutineScores(){
   const d=routineScoreForDate(new Date()), w=rangeRoutine(7), m=monthRoutine();
@@ -155,7 +185,7 @@ function renderTimeline(){
   document.querySelectorAll("[data-open-meal]").forEach(b=>b.onclick=()=>openMeal(b.dataset.openMeal));
 }
 
-/* DIET */
+/* DIET SCORE */
 function expectedMeals(d=new Date()){
   const day=dayNameFromDate(d); const arr=["breakfast","lunch"]; if(isWorkoutDay(day)) arr.push("snack"); arr.push("dinner"); return arr;
 }
@@ -259,7 +289,161 @@ function calcCustomMeal(){
   cg=Math.max(carb.defaultMin, Math.min(carb.defaultMax, cg));
   const total=Math.round(kcal(carb,cg)+fixed);
   const p=Math.round(prot(carb,cg)+prot(protein,pg)+prot(veg,vg));
-  $("customMealResult").innerHTML=`<div class="meal-item"><span>${carb.label}</span><strong>${cg} g</strong><small>${Math.round(kcal(carb,cg))} kcal</small></div><div class="meal-item"><span>${protein.label}</span><strong>${pg} g</strong><small>${Math.round(kcal(protein,pg))} kcal</small></div><div class="meal-item"><span>${veg.label}</span><strong>${vg} g</strong><small>${Math.round(kcal(veg,vg))} kcal</small></div>${passata?'<div class="meal-item"><span>Passata</span><strong>libera</strong><small>~30 kcal</small></div>':""}${oil?'<div class="meal-item"><span>Olio</span><strong>5 g max</strong><small>45 kcal</small></div>':""}<div class="rule"><strong>Totale stimato:</strong> ${total} kcal · proteine ~${p} g. Se il peso non scende, riduci prima grassi/snack, poi carboidrati.</div>`;
+  $("customMealResult").innerHTML=`<div class="meal-item"><span>${carb.label}</span><strong>${cg} g</strong><small>${Math.round(kcal(carb,cg))} kcal</small></div><div class="meal-item"><span>${protein.label}</span><strong>${pg} g</strong><small>${Math.round(kcal(protein,pg))} kcal</small></div><div class="meal-item"><span>${veg.label}</span><strong>${vg} g</strong><small>${Math.round(kcal(veg,vg))} kcal</small></div>${passata?'<div class="meal-item"><span>Passata</span><strong>libera</strong><small>~30 kcal</small></div>':""}${oil?'<div class="meal-item"><span>Olio</span><strong>5 g max</strong><small>45 kcal</small></div>':""}<div class="rule"><strong>Totale stimato:</strong> ${total} kcal · proteine ~${p} g.</div>`;
+}
+
+/* TRAINING */
+function todaySessionId(day=todayName()){ return training().split[day] || "rest"; }
+function todaySession(day=todayName()){ return training().sessions[todaySessionId(day)]; }
+function exerciseInfo(id){ return training().exercises[id]; }
+function workoutLog(dk=dateKey()){ return trainingLog(dk); }
+function sessionExerciseIds(day=todayName()){
+  const s = todaySession(day);
+  return s?.exercises || [];
+}
+function trainingScoreForDate(d){
+  const dk=dateKey(d), day=dayNameFromDate(d), sid=todaySessionId(day), s=training().sessions[sid], ids=s?.exercises||[];
+  if(!ids.length){
+    const doneWorkout = getStore(key("training_done",dk), false);
+    return {dk,day,sid,total:0,completed:doneWorkout?1:0,completionPercent:doneWorkout?100:0,progressionPercent:0,percent:doneWorkout?100:0,planned:false};
+  }
+  const log=trainingLog(dk);
+  const completed=ids.filter(id=>log[id]?.completed).length;
+  const completionPercent=Math.round(completed/ids.length*100);
+  let usefulFeedback=0;
+  ids.forEach(id=>{ if(log[id]?.completed && log[id]?.difficulty) usefulFeedback++; });
+  const progressionPercent=Math.round((usefulFeedback/ids.length)*100);
+  const percent=Math.round(completionPercent*.7+progressionPercent*.3);
+  return {dk,day,sid,total:ids.length,completed,completionPercent,progressionPercent,percent,planned:true};
+}
+function rangeTraining(n){
+  const rows=[]; for(let i=n-1;i>=0;i--) rows.push(trainingScoreForDate(addDays(new Date(),-i)));
+  const planned=rows.filter(r=>r.planned);
+  const pct=planned.length?Math.round(planned.reduce((s,r)=>s+r.percent,0)/planned.length):0;
+  return {rows,planned,percent:pct};
+}
+function monthTraining(){
+  const today=new Date(), first=new Date(today.getFullYear(),today.getMonth(),1), rows=[];
+  for(let d=new Date(first);d<=today;d.setDate(d.getDate()+1)) rows.push(trainingScoreForDate(new Date(d)));
+  const planned=rows.filter(r=>r.planned);
+  const pct=planned.length?Math.round(planned.reduce((s,r)=>s+r.percent,0)/planned.length):0;
+  return {rows,planned,percent:pct};
+}
+function renderTraining(){
+  const day=todayName(), session=todaySession(day), ids=sessionExerciseIds(day), score=trainingScoreForDate(new Date());
+  $("trainingTodayType").textContent=session.type;
+  $("trainingTodayName").textContent=session.name;
+  $("trainingCompletion").textContent=`${score.completionPercent}%`;
+  $("trainingCompletionTxt").textContent=score.planned?`${score.completed}/${score.total} esercizi completati`:"nessun peso programmato";
+  $("trainingProgression").textContent=`${score.progressionPercent}%`;
+  $("trainingProgressionTxt").textContent=score.planned?"feedback salvati sugli esercizi":"giorno senza pesi";
+  $("trainingTitle").textContent=session.name;
+  $("trainingNotes").textContent=session.notes;
+
+  if(!ids.length){
+    $("exerciseCards").innerHTML = `<div class="rule">${session.notes}</div>`;
+    $("completeWorkoutBtn").textContent = "Segna attività completata";
+  } else {
+    $("completeWorkoutBtn").textContent = "Completa allenamento";
+    const log=workoutLog();
+    $("exerciseCards").innerHTML=ids.map(id=>exerciseCard(id, log[id])).join("");
+    document.querySelectorAll("[data-exercise]").forEach(c=>c.onclick=()=>openExercise(c.dataset.exercise));
+  }
+  renderTrainingScores();
+  renderTrainingHistory();
+  renderTrainingWeek();
+}
+function exerciseCard(id, entry){
+  const ex=exerciseInfo(id), last=exerciseLast(id), load=last?.load ?? ex.defaultLoad;
+  const lastDiff=last?.difficulty ? `${training().feedback[last.difficulty].emoji} ${training().feedback[last.difficulty].label}` : "nessun feedback precedente";
+  const st=entry?.completed ? "done" : "";
+  const used=entry?.load ? `${entry.load} ${ex.unit}` : `${load} ${ex.unit}`;
+  return `<div class="exercise-card ${st}" data-exercise="${id}">
+    <div>
+      <p class="meal-type">${ex.category}</p>
+      <h3>${ex.name}</h3>
+      <p class="muted">Ultimo/carico proposto: <strong>${used}</strong> · ${lastDiff}</p>
+      ${entry?.completed ? `<p class="done-mark">Salvato: ${entry.sets.map(s=>s.reps).join(" / ")} reps · ${training().feedback[entry.difficulty]?.emoji || ""}</p>` : ""}
+    </div>
+    <button class="ghost">Apri</button>
+  </div>`;
+}
+function renderTrainingScores(){
+  const d=trainingScoreForDate(new Date()), w=rangeTraining(7), m=monthTraining();
+  $("tDaily").textContent=`${d.percent}%`; $("tDailyTxt").textContent=d.planned?`${d.completed}/${d.total} esercizi`:"giorno senza pesi";
+  $("tWeekly").textContent=`${w.percent}%`; $("tWeeklyTxt").textContent=`media sedute pesi ultimi 7 giorni`;
+  $("tMonthly").textContent=`${m.percent}%`; $("tMonthlyTxt").textContent=`media sedute pesi da inizio mese`;
+  $("tBars").innerHTML=w.rows.map(r=>`<div class="bar-row"><span class="bar-day">${r.day.slice(0,3)}</span><div class="bar-track"><div class="bar-fill" style="width:${r.percent}%"></div></div><span class="bar-score">${r.planned?r.percent+"%":"—"}</span></div>`).join("");
+  $("tComponents").innerHTML=`<div class="habit"><div><strong>Esercizi completati</strong><p>${d.planned?d.completed+"/"+d.total:"nessuna seduta pesi"} oggi</p></div><span class="habit-score">${d.completionPercent}%</span></div><div class="habit"><div><strong>Progressione</strong><p>feedback difficoltà registrati</p></div><span class="habit-score">${d.progressionPercent}%</span></div>`;
+}
+function renderTrainingHistory(){
+  const exs=training().exercises;
+  $("exerciseHistory").innerHTML=Object.entries(exs).map(([id,ex])=>{
+    const last=exerciseLast(id);
+    const txt=last ? `${last.load} ${ex.unit} · ${last.sets?.map(s=>s.reps).join("/") || "serie n/d"} · ${training().feedback[last.difficulty]?.emoji || ""}` : `${ex.defaultLoad} ${ex.unit} · carico iniziale`;
+    const note=last?.note ? `<p>${last.note}</p>` : `<p>${ex.category}</p>`;
+    return `<div class="habit"><div><strong>${ex.name}</strong>${note}</div><span class="habit-score small">${txt}</span></div>`;
+  }).join("");
+}
+function renderTrainingWeek(){
+  $("trainingWeek").innerHTML=days.slice(1).concat(["Domenica"]).map(day=>{
+    const sid=todaySessionId(day), s=training().sessions[sid];
+    return `<div class="slot"><div class="time">${day}</div><div class="task"><span>${s.name}</span><span class="muted">${s.notes}</span></div></div>`;
+  }).join("");
+}
+function openExercise(id){
+  selectedExerciseId=id;
+  selectedDifficulty=null;
+  const ex=exerciseInfo(id), last=exerciseLast(id), today=workoutLog()[id];
+  $("exerciseCategory").textContent=ex.category;
+  $("exerciseTitle").textContent=ex.name;
+  const proposed=today?.load ?? last?.load ?? ex.defaultLoad;
+  $("exerciseLoad").value=proposed;
+  $("exerciseUnit").value=ex.unit;
+  $("exerciseLastInfo").textContent=last ? `Ultima volta: ${last.load} ${ex.unit}, reps ${last.sets?.map(s=>s.reps).join(" / ") || "n/d"}, feedback ${training().feedback[last.difficulty]?.emoji || ""} ${training().feedback[last.difficulty]?.label || ""}. Nota: ${last.note || "—"}` : `Primo dato disponibile: carico iniziale ${ex.defaultLoad} ${ex.unit}.`;
+  $("exerciseNote").value=today?.note || "";
+  selectedDifficulty=today?.difficulty || null;
+  renderSets(today?.sets || [{reps:""},{reps:""},{reps:""}]);
+  updateDifficultyButtons();
+  $("exerciseModal").classList.remove("hidden");
+}
+function renderSets(sets){
+  $("setsBox").innerHTML=sets.map((s,i)=>`<div class="set-row"><span>Serie ${i+1}</span><input type="number" step="1" value="${s.reps ?? ""}" data-set-reps="${i}" placeholder="reps"><button class="text-button" data-remove-set="${i}">×</button></div>`).join("");
+  document.querySelectorAll("[data-remove-set]").forEach(b=>b.onclick=()=>{const arr=getSetsFromInputs(); arr.splice(+b.dataset.removeSet,1); renderSets(arr.length?arr:[{reps:""}]);});
+}
+function getSetsFromInputs(){
+  return Array.from(document.querySelectorAll("[data-set-reps]")).map(inp=>({reps:+inp.value||0})).filter(s=>s.reps>0 || document.querySelectorAll("[data-set-reps]").length===1);
+}
+function updateDifficultyButtons(){
+  document.querySelectorAll(".difficulty").forEach(b=>b.classList.toggle("selected", b.dataset.difficulty===selectedDifficulty));
+}
+function closeExercise(){ $("exerciseModal").classList.add("hidden"); }
+function saveExercise(){
+  if(!selectedExerciseId) return;
+  const ex=exerciseInfo(selectedExerciseId);
+  const load=+$("exerciseLoad").value || ex.defaultLoad;
+  const sets=getSetsFromInputs();
+  if(!sets.length){ alert("Inserisci almeno una serie."); return; }
+  if(!selectedDifficulty){ alert("Seleziona una difficoltà 🙂 😐 🙁."); return; }
+  const entry={completed:true,load,unit:ex.unit,sets,difficulty:selectedDifficulty,note:$("exerciseNote").value||"",date:dateKey(),savedAt:new Date().toISOString()};
+  const log=workoutLog(); log[selectedExerciseId]=entry; setTrainingLog(log);
+  setExerciseLast(selectedExerciseId, entry);
+  closeExercise();
+  render();
+}
+function completeWorkout(){
+  const day=todayName(), ids=sessionExerciseIds(day);
+  if(ids.length){
+    const log=workoutLog();
+    const completed=ids.filter(id=>log[id]?.completed).length;
+    if(completed<ids.length){
+      const ok=confirm(`Hai completato ${completed}/${ids.length} esercizi. Vuoi segnare comunque l'allenamento in routine?`);
+      if(!ok) return;
+    }
+  }
+  setStore(key("training_done"), true);
+  markTrainingRoutineDone();
+  render();
 }
 
 /* MODALS & ACTIONS */
@@ -276,7 +460,7 @@ function closeMeal(){ $("mealModal").classList.add("hidden"); }
 function openCheat(){ $("cheatModal").classList.remove("hidden"); }
 function closeCheat(){ $("cheatModal").classList.add("hidden"); }
 
-function render(){ renderRoutine(); renderDiet(); }
+function render(){ renderRoutine(); renderDiet(); renderTraining(); }
 
 function init(){
   Object.keys(routine()).forEach(day=>{
@@ -284,14 +468,16 @@ function init(){
   });
   $("daySelect").onchange=()=>{selectedDay=$("daySelect").value; render();};
 
-  document.querySelectorAll(".macro-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".macro-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".macro").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.macro).classList.add("active");});
+  document.querySelectorAll(".macro-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".macro-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".macro").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.macro).classList.add("active");render();});
   document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll("#routineSec .page").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.tab).classList.add("active");render();});
   document.querySelectorAll(".diet-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".diet-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".diet-page").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.diettab).classList.add("active");render();});
+  document.querySelectorAll(".training-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".training-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".training-page").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.trainingtab).classList.add("active");render();});
 
   $("doneBtn").onclick=()=>{
     const it=currentOrNextActivity(), id=activityId(todayName(),it); let a=actDone(); if(!a.includes(id)) a.push(id); setAct(a);
-    const e=essentialFromTitle(it[2]); if(e){let d=done(); if(!d.includes(e)) d.push(e); setDone(d);}
+    const e=essentialFromTitle(it[2]); if(e) markRoutineEssential(e);
     const mt=mealTypeFromTitle(it[2]); if(mt) setMealStatus(mt,"done");
+    if(/palestra|tennis|cardio/i.test(it[2])) setStore(key("training_done"), true);
     render();
   };
 
@@ -308,7 +494,14 @@ function init(){
   $("runAdaptBtn").onclick=()=>{ $("adaptFeedback").innerHTML=adaptFeedback(); };
   $("resetRoutineBtn").onclick=()=>{localStorage.removeItem(key("routine_done")); localStorage.removeItem(key("routine_activity_done")); render();};
   $("resetDietBtn").onclick=()=>{localStorage.removeItem(key("diet_meals")); localStorage.removeItem(key("diet_water")); localStorage.removeItem(key("diet_cheats")); render();};
+  $("resetTrainingBtn").onclick=()=>{localStorage.removeItem(key("training_log")); localStorage.removeItem(key("training_done")); render();};
   $("calcCustomMealBtn").onclick=calcCustomMeal;
+
+  $("completeWorkoutBtn").onclick=completeWorkout;
+  $("closeExerciseBtn").onclick=closeExercise;
+  $("addSetBtn").onclick=()=>{const arr=getSetsFromInputs(); arr.push({reps:""}); renderSets(arr);};
+  document.querySelectorAll(".difficulty").forEach(b=>b.onclick=()=>{selectedDifficulty=b.dataset.difficulty; updateDifficultyButtons();});
+  $("saveExerciseBtn").onclick=saveExercise;
 
   $("notifyBtn").onclick=async()=>{ if(!("Notification" in window)){alert("Notifiche non supportate."); return;} const p=await Notification.requestPermission(); if(p==="granted") new Notification("Routine attiva",{body:"Notifiche routine abilitate."}); };
 

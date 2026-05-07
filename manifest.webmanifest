@@ -1,11 +1,11 @@
 {
-  "name": "Routine & Dieta",
-  "short_name": "RoutineDieta",
+  "name": "Routine Dieta Allenamento",
+  "short_name": "RDA",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#111827",
-  "description": "Routine, dieta, meal prep, acqua, Renpho e score.",
+  "description": "Routine, dieta, meal prep, acqua, Renpho, allenamento e score.",
   "icons": [
     {
       "src": "icons/icon-192.png",
